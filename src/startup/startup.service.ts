@@ -9,18 +9,15 @@ import { UpdateStartupDTO } from './dto/update-startup.dto';
 export class StartupService {
   constructor(private prisma: PrismaService) { }
 
-  //criar
   async create(data: createStartupDTO) {
     return this.prisma.startup.create({ data });
   }
 
-  // Listar todos
   async findAll() {
     return this.prisma.startup.findMany();
 
   }
 
-  // Buscar por ID
   async findOne(id: string) {
     const startup = await this.prisma.startup.findUnique({ where: { id } });
 
@@ -31,7 +28,55 @@ export class StartupService {
     return startup;
   }
 
-  // Atualizar
+  async findByTecnology(tecnology: string) {
+    try {
+      const startups = await this.prisma.startup.findMany({
+        where: { 
+          technology: {
+            contains: tecnology,
+            mode: 'insensitive'
+          }
+          
+        }
+      })
+      return startups
+    } catch {
+      throw new NotFoundException(`Startups não encontradas ou não existentes`)
+    }
+  }
+
+  async findBySegment(segment: string) {
+    try {
+      const startups = await this.prisma.startup.findMany({
+        where: {
+          segment: {
+            contains: segment,
+            mode: 'insensitive'
+          }
+        }
+      })
+      return startups
+    } catch {
+      throw new NotFoundException(`Startups não encontradas ou não existentes`)
+    }
+  }
+
+  async findByProblem(problem: string){
+    try {
+      const startups = await this.prisma.startup.findMany({
+        where: {
+          problem: {
+            contains: problem,
+            mode: 'insensitive'
+          }
+        }
+      })
+      return startups
+    } catch {
+      throw new NotFoundException(`Startups não encontradas ou não existentes`)
+    }
+  }
+
   async update(id: string, data: UpdateStartupDTO) {
     const startup = await this.prisma.startup.findUnique({ where: { id } });
 
@@ -45,7 +90,6 @@ export class StartupService {
     });
   }
 
-  // Deletar
   async remove(id: string) {
     try {
       return this.prisma.startup.delete({

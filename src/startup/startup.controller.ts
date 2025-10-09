@@ -40,6 +40,33 @@ export class StartupController {
     return this.startupService.findOne(id);
   }
 
+  @Get(':tecnology')
+  @ApiOperation({ summary: 'Listar startup por tecnologia' })
+  @ApiResponse({ status: 200, description: 'Startup encontrada com sucesso' })
+  @ApiResponse({ status: 404, description: 'Startup não encontrada' })
+  @ApiResponse({ status: 500, description: 'Erro interno do servidor' })
+  findByTecnology(@Body() tecnology: string){
+    return this.startupService.findByTecnology(tecnology)
+  }
+
+  @Get(':segment')
+  @ApiOperation({ summary: 'Listar startup por setor' })
+  @ApiResponse({ status: 200, description: 'Startup encontrada com sucesso' })
+  @ApiResponse({ status: 404, description: 'Startup não encontrada' })
+  @ApiResponse({ status: 500, description: 'Erro interno do servidor' })
+  findBySector(@Body() segment: string){
+    return this.startupService.findBySegment(segment)
+  }
+
+  @Get(':problem')
+  @ApiOperation({ summary: 'Listar startup por problema' })
+  @ApiResponse({ status: 200, description: 'Startup encontrada com sucesso' })
+  @ApiResponse({ status: 404, description: 'Startup não encontrada' })
+  @ApiResponse({ status: 500, description: 'Erro interno do servidor' })
+  findByProblem(@Body() problem: string){
+    return this.startupService.findByProblem(problem)
+  }
+
   @Put(':id')
   @ApiOperation({ summary: 'Atualiza uma startup por ID' })
   @ApiConsumes('application/json')

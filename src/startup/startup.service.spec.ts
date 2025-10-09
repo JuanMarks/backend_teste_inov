@@ -15,11 +15,11 @@ describe("StartupService", () => {
 
   const mockPrismaService = {
     startup: {
-      create: jest.fn(),
-      findMany: jest.fn(),
-      findUnique: jest.fn(),
-      update: jest.fn(),
-      delete: jest.fn(),
+      create: jest.fn() as jest.Mock,
+      findMany: jest.fn() as jest.Mock,
+      findUnique: jest.fn() as jest.Mock,
+      update: jest.fn() as jest.Mock,
+      delete: jest.fn() as jest.Mock,
     }
   }
 
@@ -123,6 +123,127 @@ describe("StartupService", () => {
     mockPrismaService.startup.findUnique.mockResolvedValue(null)
     await expect(service.findOne('9999')).rejects.toThrow(new ConflictException('Startup não encontrada'))
   })
+
+  it("deve retornar múltiplas startups filtradas por tecnologia", async () => {
+    const mockData = [
+      {
+        id: "1",
+        name: "TechAI",
+        cnpj: "11.111.111/0001-11",
+        segment: "Tecnologia",
+        problem: "Baixo uso de IA em processos empresariais",
+        technology: "Inteligência Artificial",
+        stage: StageStartup.TRACAO,
+        location: "São Paulo - SP",
+        founders: "Ana Silva",
+        pitch: "Plataforma de automação com IA para pequenas empresas",
+        links: "https://techai.com.br",
+      },
+      {
+        id: "2",
+        name: "VisionBot",
+        cnpj: "22.222.222/0001-22",
+        segment: "Automação",
+        problem: "Falta de inspeção automatizada em fábricas",
+        technology: "Visão Computacional",
+        stage: StageStartup.IDEACAO,
+        location: "Campinas - SP",
+        founders: "Lucas Pereira",
+        pitch: "Solução de visão computacional para controle de qualidade industrial",
+        links: "https://visionbot.com",
+      },
+    ];
+
+    mockPrismaService.startup.findMany.mockResolvedValue(mockData);
+
+    const result = await service.findByTecnology("Inteligência Artificial");
+
+    expect(prisma.startup.findMany).toHaveBeenCalledWith({
+      where: { technology: { contains: "Inteligência Artificial", mode: "insensitive" } },
+    });
+    expect(result).toEqual(mockData);
+  });
+
+  it("deve retornar múltiplas startups filtradas por setor", async () => {
+    const mockData = [
+      {
+        id: "3",
+        name: "FinUp",
+        cnpj: "33.333.333/0001-33",
+        segment: "Financeiro",
+        problem: "Dificuldade no controle de gastos pessoais",
+        technology: "Fintech",
+        stage: StageStartup.TRACAO,
+        location: "Curitiba - PR",
+        founders: "Mariana Costa",
+        pitch: "App que ajuda usuários a gerenciar finanças pessoais via IA",
+        links: "https://finup.com.br",
+      },
+      {
+        id: "4",
+        name: "PaySmart",
+        cnpj: "44.444.444/0001-44",
+        segment: "Financeiro",
+        problem: "Falta de soluções para pagamentos automatizados",
+        technology: "Blockchain",
+        stage: StageStartup.TRACAO,
+        location: "Florianópolis - SC",
+        founders: "Rafael Gomes",
+        pitch: "Sistema de pagamentos inteligentes via contratos digitais",
+        links: "https://paysmart.com",
+      },
+    ];
+
+    mockPrismaService.startup.findMany.mockResolvedValue(mockData);
+
+    const result = await service.findBySegment("Financeiro");
+
+    expect(prisma.startup.findMany).toHaveBeenCalledWith({
+      where: { segment: { contains: "Financeiro", mode: "insensitive" } },
+    });
+    expect(result).toEqual(mockData);
+  });
+
+  it("deve retornar múltiplas startups filtradas por problema", async () => {
+    const mockData = [
+      {
+        id: "5",
+        name: "HealthTrack",
+        cnpj: "55.555.555/0001-55",
+        segment: "Saúde",
+        problem: "Falta de acompanhamento remoto de pacientes crônicos",
+        technology: "IoT e Cloud",
+        stage: StageStartup.TRACAO,
+        location: "Recife - PE",
+        founders: "Carla Mendes",
+        pitch: "Plataforma para monitoramento remoto de pacientes usando IoT",
+        links: "https://healthtrack.com",
+      },
+      {
+        id: "6",
+        name: "NutriSmart",
+        cnpj: "66.666.666/0001-66",
+        segment: "Saúde",
+        problem: "Dificuldade em personalizar dietas",
+        technology: "Machine Learning",
+        stage: StageStartup.TRACAO,
+        location: "Porto Alegre - RS",
+        founders: "Thiago Almeida",
+        pitch: "Aplicativo que cria planos alimentares com base em IA",
+        links: "https://nutrismart.com",
+      },
+    ];
+
+    mockPrismaService.startup.findMany.mockResolvedValue(mockData);
+
+    const result = await service.findByProblem("Saúde");
+
+    expect(prisma.startup.findMany).toHaveBeenCalledWith({
+      where: { problem: { contains: "Saúde", mode: "insensitive" } },
+    });
+    expect(result).toEqual(mockData);
+  });
+
 
   it("deve atualizar uma startup", async () => {
     const StartupAtual = {
