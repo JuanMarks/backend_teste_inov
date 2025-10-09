@@ -1,0 +1,245 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String        @id @default(uuid())
+  name       String
+  email      String        @unique
+  password   String
+  role       Role
+  companyId  String?
+  company    Companies?    @relation(fields: [companyId], references: [id])
+  avatar     String?
+  ideas      Idea[]
+  Comments   Comments[]
+  evaluation Evaluations[]
+  poc        Poc[]
+  createdAt  DateTime      @default(now())
+}
+
+enum Role {
+  ADMIN
+  COMUM
+  AVALIADOR
+  GESTOR
+}
+
+model Companies {
+  id          String        @id @default(uuid())
+  name        String        @unique
+  cnpj        String        @unique
+  users       User[]
+  challenges  Challenges[]
+  ideas       Idea[]
+  connections Connections[]
+  createdAt   DateTime      @default(now())
+}
+
+model Challenges {
+  id          String          @id @default(uuid())
+  name        String
+  startDate   DateTime
+  endDate     DateTime
+  area        String
+  description String
+  type        TypePublication
+  companyId   String?
+  company     Companies?      @relation(fields: [companyId], references: [id])
+  status      Status
+  ideas       Idea[]
+  connections Connections[]
+  poc         Poc[]
+  images      String
+  tags        Tags
+  categoria   CategoriaChallenges
+  createdAt   DateTime        @default(now())
+}
+
+enum Tags {
+  IA
+  SUSTENTABILIDADE
+  FINTECH
+  HEALTHTECH
+  EDTECH
+  IOT
+  BLOCKHAIN
+  AUTOMACAO
+}
+
+enum CategoriaChallenges {
+  AMBIENTAL
+  TECNOLOGIA
+  SUSTENTAVEL
+  FINANCEIRO
+  OPERACIONAL
+  COMERCIAL
+  SAUDE
+  SOCIAL
+  EDUCACIONAL
+  LOGISTICO
+  CULTURAL
+}
+
+enum TypePublication {
+  PUBLICO
+  RESTRITO
+}
+
+enum Status {
+  ATIVO
+  INATIVO
+  PENDENTE
+}
+
+model Idea {
+  id          String        @id @default(uuid())
+  title       String
+  description String
+  stage       Stage
+  priority    Priority
+  votes       Int?
+  createdAt   DateTime      @default(now())
+  authorId    String
+  author      User          @relation(fields: [authorId], references: [id])
+  companyId   String
+  company     Companies     @relation(fields: [companyId], references: [id])
+  challengeId String
+  challenge   Challenges    @relation(fields: [challengeId], references: [id])
+  evaluations Evaluations[]
+}
+
+enum Stage {
+  GERACAO
+  PRE_TRIAGEM
+  IDEACAO
+  TRIAGEM_DETALHADA
+  EXPERIMENTACAO
+}
+
+enum Priority {
+  ALTA
+  MEDIA
+  BAIXA
+}
+
+enum CommentableType {
+  IDEA
+  CHALLENGE
+}
+model Comments {
+  id              String           @id @default(cuid())
+  text         String
+  commentableType CommentableType
+  commentableId   String         // ID da entidade referenciada
+  authorId        String
+  author          User             @relation(fields: [authorId], references: [id])
+  evaluationsId String?
+  evaluations   Evaluations? @relation(fields: [evaluationsId], references: [id])
+  createdAt     DateTime    @default(now())
+}
+
+model Evaluations {
+  id          String          @id @default(uuid())
+  stage       Stage           @default(PRE_TRIAGEM)
+  criteria    ModelCriteria[]
+  comments    Comments[]
+  ideaId      String
+  idea        Idea            @relation(fields: [ideaId], references: [id])
+  evaluatorId String
+  evaluator   User            @relation(fields: [evaluatorId], references: [id])
+  createdAt   DateTime        @default(now())
+}
+
+model ModelCriteria {
+  id            String      @id @default(uuid())
+  name          String
+  value         Boolean
+  evaluationsId String
+  evaluations   Evaluations @relation(fields: [evaluationsId], references: [id])
+  createdAt     DateTime    @default(now())
+}
+
+model Startup {
+  id          String        @id @default(uuid())
+  name        String
+  cnpj        String        @unique
+  segment     String
+  problem     String
+  technology  String
+  stage       StageStartup
+  location    String
+  founders    String
+  pitch       String
+  links       String
+  connections Connections[]
+  poc         Poc[]
+  createdAt   DateTime      @default(now())
+}
+
+enum StageStartup {
+  IDEACAO
+  OPERACAO
+  TRACAO
+  ESCALA
+}
+
+model Connections {
+  id          String           @id @default(uuid())
+  status      StatusConnectios
+  history     Json
+  challengeId String
+  challenges  Challenges       @relation(fields: [challengeId], references: [id])
+  startupId   String
+  startup     Startup          @relation(fields: [startupId], references: [id])
+  companyId   String
+  company     Companies        @relation(fields: [companyId], references: [id])
+  createdAt   DateTime         @default(now())
+}
+
+enum StatusConnectios {
+  INTERESSE
+  PENDENTE
+  NAO_INTERESSE
+}
+
+model Invitation {
+  id        String      @id @default(cuid())
+  email     String
+  role      Role
+  companyId String
+  tokenHash String // hash seguro do token enviado por email
+  status    StatusInvit @default(PENDENTE) // pending, completed, cancelled
+  expiresAt DateTime
+  createdAt DateTime    @default(now())
+
+  @@index([tokenHash])
+  @@index([email])
+}
+
+enum StatusInvit {
+  PENDENTE
+  COMPLETO
+  CANCELADO
+  EXPIRADO
+}
+
+model Poc {
+  id           String      @id @unique @default(uuid())
+  title        String
+  targets      String
+  deadlines    String
+  indicators   String
+  userId       String
+  user         User        @relation(fields: [userId], references: [id])
+  challengesId String?
+  challenges   Challenges? @relation(fields: [challengesId], references: [id])
+  startupId    String?
+  startup      Startup?    @relation(fields: [startupId], references: [id])
+  createdAt    DateTime    @default(now())
+}
