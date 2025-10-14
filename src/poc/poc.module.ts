@@ -6,6 +6,7 @@ import { ComumGuard } from "src/auth/comum-auth.guard";
 import { AvaliadorGuard } from "src/auth/avaliador-auth.guard";
 import { GestorGuard } from "src/auth/gestor-auth.guard";
 import { RolesOrGuard } from "src/auth/rolesOrGuard.guard";
+import { AdminGuard } from "src/auth/admin.guard";
 
 @Module({
     imports: [PrismaModule],
@@ -15,7 +16,8 @@ import { RolesOrGuard } from "src/auth/rolesOrGuard.guard";
         ComumGuard,
         AvaliadorGuard,
         GestorGuard,
-        RolesOrGuard
+        RolesOrGuard,
+        AdminGuard
     ]
 })
 export class POCModule {}

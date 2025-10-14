@@ -10,6 +10,7 @@ import { AvaliadorGuard } from './avaliador-auth.guard';
 import { GestorGuard } from './gestor-auth.guard';
 import { RolesOrGuard } from './rolesOrGuard.guard';
 import { CloudinaryService } from './cloudinary.service';
+import { AdminGuard } from './admin.guard';
 import "dotenv/config";
 
 @Module({
@@ -20,7 +21,7 @@ import "dotenv/config";
       signOptions: { expiresIn: '1d' }, // expiração do token
     }),
   ],
-  providers: [AuthService, CloudinaryService, PrismaService, JwtStrategy, ComumGuard, AvaliadorGuard, GestorGuard, RolesOrGuard],
+  providers: [AuthService, CloudinaryService, PrismaService, JwtStrategy, ComumGuard, AvaliadorGuard, GestorGuard, RolesOrGuard, AdminGuard],
   controllers: [AuthController],
   exports: [AuthService,],
 })

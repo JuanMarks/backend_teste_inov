@@ -27,6 +27,19 @@ export class IdeaService {
         return existing
     }
 
+    async getIdeasByChallengeId(challengeId: string){
+        return await this.prisma.idea.findMany({
+            where: {challengeId}
+        })
+    }
+
+    async getIdeasByCompanyId(companyId: string){
+        return await this.prisma.idea.findMany({
+            where: {companyId}
+        })
+    }
+
+
     async update(id: string, data: UpdateIdeaDto){
         const existing = await this.prisma.idea.findUnique({where: {id}})
 

@@ -6,10 +6,12 @@ import { RolesOrGuard } from "src/auth/rolesOrGuard.guard";
 import { GestorGuard } from "src/auth/gestor-auth.guard";
 import { AvaliadorGuard } from "src/auth/avaliador-auth.guard";
 import { ComumGuard } from "src/auth/comum-auth.guard";
+import { AdminGuard } from "src/auth/admin.guard";
+
 
 @Module({
     imports: [PrismaModule],
-    providers: [ConnectionsService, RolesOrGuard, GestorGuard, AvaliadorGuard, ComumGuard],
+    providers: [ConnectionsService, RolesOrGuard, GestorGuard, AvaliadorGuard, ComumGuard, AdminGuard],
     controllers: [ConnectionsController],
     exports: [ConnectionsService]
 })

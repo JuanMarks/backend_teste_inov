@@ -52,6 +52,15 @@ export class ChallengeController {
         return this.challengeService.findByRestricted()
     }
 
+    @Get('findByCompany/:companyId')
+    @ApiOperation({ summary: 'Listar os desafios por empresa '})
+    @ApiResponse({status: 200, description: 'Lista de desafios por empresa retornada com sucesso'})
+    @ApiResponse({status: 404, description: 'Desafios não encontrado'})
+    @ApiResponse({status: 500, description: 'Erro interno no servidor'})
+    findByCompany(@Param('companyId') companyId: string){
+        return this.challengeService.findByCompany(companyId)
+    }
+
     @Get(':id')
     @ApiOperation({ summary: 'Listar o desafio por id '})
     @ApiResponse({status: 200, description: 'Desafio encontrado com sucesso'})

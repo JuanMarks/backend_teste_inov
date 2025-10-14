@@ -5,8 +5,9 @@ import { UpdatePocDTO } from "./dto/update-poc.dto";
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { GestorGuard } from "../auth/gestor-auth.guard";
+import { RolesOrGuard } from "src/auth/rolesOrGuard.guard";
 
-@UseGuards(JwtAuthGuard, GestorGuard)
+@UseGuards(JwtAuthGuard, RolesOrGuard)
 @ApiBearerAuth()
 @Controller('POC')
 export class POCController {

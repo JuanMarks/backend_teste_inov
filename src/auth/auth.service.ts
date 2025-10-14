@@ -49,7 +49,9 @@ export class AuthService {
     });
   }
 
-  async login(data: LoginDto) {
+  // /backend_teste_inov/src/auth/auth.service.ts
+
+async login(data: LoginDto) {
     const user = await this.validateUser(data.email, data.password);
     if (!user) {
       throw new ForbiddenException('Credenciais inválidas');
@@ -62,8 +64,12 @@ export class AuthService {
       email: user.email,
     };
 
+    // Remove a senha do objeto de usuário antes de retorná-lo
+    const { password, ...userResult } = user;
+
     return {
       access_token: this.jwtService.sign(payload),
+      user: userResult, // <-- AQUI ESTÁ A MUDANÇA
     };
   }
 }

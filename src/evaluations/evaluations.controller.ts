@@ -5,13 +5,14 @@ import {
   Body,
   Param,
   Delete,
-  Patch,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { EvaluationsService } from './evaluations.service';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { AvaliadorGuard } from 'src/auth/avaliador-auth.guard';
+import { GestorGuard } from 'src/auth/gestor-auth.guard';
 import {
   ApiTags,
   ApiBearerAuth,
@@ -19,11 +20,12 @@ import {
   ApiResponse,
   ApiParam,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Evaluations') // Nome do grupo no Swagger
 @ApiBearerAuth() // Mostra o campo "Authorize" (para JWT)
 @Controller('evaluations')
-@UseGuards(AvaliadorGuard)
+@UseGuards(JwtAuthGuard, GestorGuard)
 export class EvaluationsController {
   constructor(private readonly evaluationsService: EvaluationsService) {}
 
@@ -50,7 +52,7 @@ export class EvaluationsController {
     return this.evaluationsService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @ApiOperation({ summary: 'Atualiza uma avaliação existente' })
   @ApiParam({ name: 'id', description: 'ID da avaliação' })
   @ApiResponse({ status: 200, description: 'Avaliação atualizada com sucesso.' })

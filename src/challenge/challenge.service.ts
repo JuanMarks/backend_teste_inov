@@ -75,6 +75,17 @@ export class ChallengeService {
         return allChallenge
     }
 
+    async findByCompany(companyId: string) {
+        const allChallenge = await this.prismaService.challenges.findMany({
+            where: {
+                companyId
+            }
+        })
+
+        return allChallenge
+    }
+
+
     async findByRestricted() {
         const allChallenge = await this.prismaService.challenges.findMany({
             where: {

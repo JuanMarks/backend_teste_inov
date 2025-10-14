@@ -10,9 +10,10 @@ import { ConnectionsModule } from './connections/connections.module';
 import { IdeaModule } from './idea/idea.module';
 import { CommentsModule } from './comments/comments.module';
 import { EvaluationsModule } from './evaluations/evaluations.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, ChallengeModule, CompaniesModule, StartupModule, POCModule, InvitationsModule, ConnectionsModule, IdeaModule, CommentsModule, EvaluationsModule],
+  imports: [PrismaModule, AuthModule, ChallengeModule, CompaniesModule, StartupModule, POCModule, InvitationsModule, ConnectionsModule, IdeaModule, CommentsModule, EvaluationsModule, UserModule],
   controllers: [],
   providers: [],
 })

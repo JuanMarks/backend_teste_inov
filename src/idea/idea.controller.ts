@@ -49,6 +49,26 @@ export class IdeaController {
         return this.ideaService.getIdeaById(id)
     }
 
+    @Get("challenge/:challengeId")
+    @UseGuards(RolesOrGuard)
+    @ApiOperation({summary: 'Retorna as ideias de um desafio pelo ID do desafio'})
+    @ApiResponse({status: 200, description: 'Lista de ideias retornada com sucesso.'})
+    @ApiResponse({status: 404, description: 'Desafio não encontrado.'})
+    @ApiResponse({status: 500, description: 'Internal Server Error.'})
+    getIdeasByChallengeId(@Param("challengeId") challengeId: string){
+        return this.ideaService.getIdeasByChallengeId(challengeId)
+    }
+
+    @Get("company/:companyId")
+    @UseGuards(RolesOrGuard)
+    @ApiOperation({summary: 'Retorna as ideias de uma empresa pelo ID da empresa'})
+    @ApiResponse({status: 200, description: 'Lista de ideias retornada com sucesso.'})
+    @ApiResponse({status: 404, description: 'Empresa não encontrada.'})
+    @ApiResponse({status: 500, description: 'Internal Server Error.'})
+    getIdeasByCompanyId(@Param("companyId") companyId: string){
+        return this.ideaService.getIdeasByCompanyId(companyId)
+    }
+
     @Put(":id")
     @UseGuards(RolesOrGuard)
     @ApiOperation({summary: 'Atualiza uma ideia pelo ID'})
