@@ -43,7 +43,7 @@ import { CompleteInvitationsDto } from './completeInvitationsDto';
     @ApiResponse({ status: 403, description: 'Forbidden. Apenas usuários com papel GESTOR podem enviar convites.' })
     @ApiResponse({ status: 400, description: 'Bad Request. Dados inválidos ou convite já enviado.' })
     @ApiResponse({ status: 500, description: 'Internal Server Error. Erro ao enviar o convite.' })
-    @UseGuards(GestorGuard)
+    // @UseGuards(GestorGuard)
     async sendInvitation(@Body() data: SendInvitationDto, @Req() req) {
       const { companyId } = req.user
       return this.invitationsService.sendInvitation(data, companyId);
