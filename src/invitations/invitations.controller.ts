@@ -15,6 +15,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { GestorGuard } from '../auth/gestor-auth.guard';
 import { CompleteInvitationsDto } from './completeInvitationsDto';
+import { BadRequestException, ForbiddenException } from '@nestjs/common/exceptions';
 
 
   @UseGuards(JwtAuthGuard)
@@ -45,8 +46,21 @@ import { CompleteInvitationsDto } from './completeInvitationsDto';
     @ApiResponse({ status: 500, description: 'Internal Server Error. Erro ao enviar o convite.' })
     // @UseGuards(GestorGuard)
     async sendInvitation(@Body() data: SendInvitationDto, @Req() req) {
-      const { companyId } = req.user
-      return this.invitationsService.sendInvitation(data, companyId);
+        const user = req.user;
+        let companyIdToSend: string;
+
+        if (user.role === 'GESTOR') {
+            companyIdToSend = user.companyId;
+        } else if (user.role === 'ADMIN') {
+            if (!data.companyId) { // Se for admin, o companyId tem de vir no body
+                throw new BadRequestException('Admin deve especificar um companyId para o convite.');
+            }
+            companyIdToSend = data.companyId;
+        } else {
+            throw new ForbiddenException('Apenas gestores ou administradores podem enviar convites.');
+        }
+
+        return this.invitationsService.sendInvitation(data, companyIdToSend);
     }
   
     // Endpoint para validar convite (frontend pode chamar antes de exibir formulário)
