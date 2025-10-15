@@ -18,8 +18,8 @@ export class AuthController {
   //------------------------------------------------------------------------------------------------------------------------------------//
 
   @Post('register')
-  // @UseGuards(JwtAuthGuard)
-  // @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @UseInterceptors(FileFieldsInterceptor([{ name: 'images', maxCount: 1 }]))
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Registrar novo Gestor' })
