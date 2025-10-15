@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 
@@ -47,7 +47,11 @@ export class EvaluationsService {
   }
 
   async update(id: string, dto: UpdateEvaluationDto) {
-    await this.findOne(id);
+    const existing = await this.findOne(id);
+
+    if(!existing){
+      throw new NotFoundException(`Avaliação com ID ${id} não existente!`)
+    }
 
     return this.prisma.evaluations.update({
       where: { id },

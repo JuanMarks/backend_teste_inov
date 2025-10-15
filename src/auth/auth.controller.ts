@@ -13,12 +13,13 @@ export class AuthController {
   constructor(private readonly authService: AuthService, private cloudinary: CloudinaryService) { }
 
   // rota protegida: precisa estar logado (Admin ou Gestor)
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  
 
   //------------------------------------------------------------------------------------------------------------------------------------//
 
   @Post('register')
+  // @UseGuards(JwtAuthGuard)
+  // @ApiBearerAuth()
   @UseInterceptors(FileFieldsInterceptor([{ name: 'images', maxCount: 1 }]))
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Registrar novo Gestor' })

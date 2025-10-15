@@ -6,12 +6,14 @@ import {
     Query,
     UseGuards,
     Req,
+    Delete,
+    Param
   } from '@nestjs/common';
   import { InvitationsService } from './invitations.service';
   import { SendInvitationDto } from './dto/sendInvitationsDTO';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { GestorGuard } from 'src/auth/gestor-auth.guard';
+import { GestorGuard } from '../auth/gestor-auth.guard';
 import { CompleteInvitationsDto } from './completeInvitationsDto';
 
 
@@ -80,4 +82,17 @@ import { CompleteInvitationsDto } from './completeInvitationsDto';
     async completeInvitation(@Body() data: CompleteInvitationsDto,) {
       return this.invitationsService.completeInvitation(data);
     }
+
+    @Delete(':id')
+    async deleteInvitation(@Param('id') id: string) {
+      return this.invitationsService.deleteInvitation(id);
+    }
+
+    @Get()
+    @ApiOperation({ summary: 'Listar todos os convites' })
+    @ApiResponse({ status: 200, description: 'Lista de convites retornada com sucesso.' })
+    async getAllInvitations() {
+      return this.invitationsService.getAllInvitations();
+    }
+  
   }

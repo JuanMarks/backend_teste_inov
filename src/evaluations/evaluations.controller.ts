@@ -11,8 +11,8 @@ import {
 import { EvaluationsService } from './evaluations.service';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
-import { AvaliadorGuard } from 'src/auth/avaliador-auth.guard';
-import { GestorGuard } from 'src/auth/gestor-auth.guard';
+import { AvaliadorGuard } from '../auth/avaliador-auth.guard';
+import { GestorGuard } from '../auth/gestor-auth.guard';
 import {
   ApiTags,
   ApiBearerAuth,
@@ -20,7 +20,7 @@ import {
   ApiResponse,
   ApiParam,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Evaluations') // Nome do grupo no Swagger
 @ApiBearerAuth() // Mostra o campo "Authorize" (para JWT)

@@ -1,6 +1,6 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { Role } from '@prisma/client';
 import { SendInvitationDto } from './dto/sendInvitationsDTO';
@@ -105,5 +105,31 @@ export class InvitationsService {
         });
 
         return { message: 'Usuário registrado com sucesso' };
+      }
+
+      async removeExpiredInvitations() {
+        const result = await this.prisma.invitation.deleteMany({
+          where: {
+            expiresAt: { lt: new Date() },
+            status: 'PENDENTE',
+          },
+        });
+        return { message: `${result.count} convites expirados removidos.` };
+      }
+
+      async deleteInvitation(id: string) {
+        const existing = await this.prisma.invitation.findUnique({where: {id}})
+
+        if(!existing){
+            throw new NotFoundException(`nenhum convite com esse id: ${id} encontrado.`)
+        }
+
+        await this.prisma.invitation.delete({where: {id}})
+
+        return `Convite deletado.`
+      }
+
+      async getAllInvitations(){
+        return await this.prisma.invitation.findMany()
       }
 }

@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Req, UnauthorizedException,
 import { CommentsService } from './comments.service';
 import { CreateCommentsDto } from './dto/createCommentsDto';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()

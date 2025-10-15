@@ -1,10 +1,10 @@
 import { Controller, Delete, Get, Param, Post, Put, Req, UseGuards, Body } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { GestorGuard } from 'src/auth/gestor-auth.guard';
-import { AdminGuard } from 'src/auth/admin.guard';
-import { CreateUserDto } from 'src/auth/dto/createUserDTO';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { GestorGuard } from '../auth/gestor-auth.guard';
+import { AdminGuard } from '../auth/admin.guard';
+import { CreateUserDto } from '../auth/dto/createUserDTO';
 
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
@@ -20,7 +20,7 @@ export class UserController {
     }
 
     @ApiOperation({summary: "Filtra usuários por empresa"})
-    @UseGuards(GestorGuard)
+    // @UseGuards(GestorGuard)
     @ApiResponse({status: 200, description: "Lista de usuários filtrada por empresa."})
     @ApiResponse({status: 404, description: "Empresa não encontrada."})
     @ApiResponse({status: 401, description: "Não autorizado."})
