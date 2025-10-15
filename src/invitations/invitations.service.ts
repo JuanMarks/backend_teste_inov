@@ -21,9 +21,9 @@ export class InvitationsService {
             throw new Error('Já existe um convite pendente para este e-mail nesta empresa');
         }
         
-        if (data.role === 'ADMIN' || data.role === 'GESTOR') {
-            throw new ForbiddenException('Não pode convidar um ADMIN ou GESTOR');
-        }
+        // if (data.role === 'ADMIN' || data.role === 'GESTOR') {
+        //     throw new ForbiddenException('Não pode convidar um ADMIN ou GESTOR');
+        // }
 
         const payload = {
             email: data.email,
