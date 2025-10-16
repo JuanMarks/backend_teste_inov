@@ -22,7 +22,7 @@ const config = new DocumentBuilder()
     .build();
 
     app.enableCors({
-      origin: ['http://localhost:3001',], 
+      origin: true, 
       credentials: true,
     });
 
