@@ -12,7 +12,7 @@ export class MailService {
     this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT || 587),
-      secure: process.env.SMTP_SECURE === 'true',
+      secure: false,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
@@ -27,7 +27,7 @@ export class MailService {
     const mailOptions = {
       from: process.env.MAIL_FROM || 'no-reply@example.com',
       to,
-      subject: 'Convite para registo',
+      subject: 'Convite para registro',
       html: `
         <p>Foste convidado para te registares. Clica no link abaixo (válido por 24 horas):</p>
         <p><a href="${link}">Finalizar cadastro</a></p>
