@@ -2,7 +2,8 @@
 /dist
 /node_modules
 /build
-
+/copia
+copia_backend.rar
 # Logs
 logs
 *.log
