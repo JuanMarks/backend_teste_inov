@@ -9,15 +9,16 @@ export class MailService {
   private logger = new Logger(MailService.name);
 
   constructor() {
+    const port = Number(process.env.SMTP_PORT || 465);
     this.transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT || 587),
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
+            host: process.env.SMTP_HOST,
+            port: port,
+            secure: port === 465, // <-- ALTERAÇÃO PRINCIPAL: Defina `secure` como `true` se a porta for 465
+            auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS,
+            },
+        });
   }
 
   async sendInvitationEmail(to: string, token: string) {
