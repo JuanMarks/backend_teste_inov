@@ -12,7 +12,7 @@ export class MailService {
   }
 
   async sendInvitationEmail(to: string, token: string) {
-    const frontendUrl = process.env.FRONTEND_INVITE_URL || 'http://http://localhost:3000/cadastro';
+    const frontendUrl = process.env.FRONTEND_INVITE_URL || 'http://localhost:3000/cadastro';
     const link = `${frontendUrl}?token=${token}`;
 
     try {
